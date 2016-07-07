@@ -1,0 +1,187 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                template="templates/template.xhtml"
+                xmlns:pe="http://primefaces.org/ui/extensions">
+
+   <ui:define name="metadata">
+   </ui:define>
+   <ui:define name="content">
+      <p:growl id="editMsgs" showDetail="true"/>
+      <h3>Responsive</h3>
+      <div class="ui-g">
+         <div class="ui-g-12 ui-md-6 ui-lg-1">
+            <p:outputLabel for="radio" value="Creación (*)"  />
+         </div>
+         <div class="ui-g-12 ui-md-6 ui-lg-5">
+            <p:selectOneRadio id="radio" value="Autogenerado" layout="responsive" columns="2" style="width:60%">
+               <f:selectItems value="#{conceptMBean.selectItems1}" />
+            </p:selectOneRadio>
+         </div>
+         <div class="ui-g-12 ui-md-6 ui-lg-3">
+         </div>
+         <div class="ui-g-12 ui-md-6 ui-lg-3">
+         </div>
+      </div>
+
+      <div class="ui-g">
+         <div class="ui-g-12 ui-md-6 ui-lg-1">
+            <p:outputLabel for="check" value="Indicadores"  />
+         </div>
+         <div class="ui-g-12 ui-md-6 ui-lg-5">
+            <p:selectManyCheckbox id="check" layout="responsive" columns="2" style="width:60%">
+               <f:selectItems value="#{conceptMBean.selectItems3}"  />
+            </p:selectManyCheckbox>
+         </div>
+         <div class="ui-g-12 ui-md-6 ui-lg-3">
+         </div>
+         <div class="ui-g-12 ui-md-6 ui-lg-3">
+
+         </div>
+      </div>
+
+      <div class="ui-g">
+         <div class="ui-g-12 ui-md-6 ui-lg-1">
+            <p:outputLabel for="txt" value="FSN (*)"/>
+         </div>
+         <div class="ui-g-12 ui-md-6 ui-lg-5">
+            <p:inputText id="txt" value="electrocardiograma de urgencia (indicaciones generales)" style="width:90%"/>
+         </div>
+         <div class="ui-g-12 ui-md-6 ui-lg-2">
+            <p:selectOneRadio id="radio2" value="Insensible" layout="responsive" columns="2" style="width:100%">
+               <f:selectItems value="#{conceptMBean.selectItems2}" />
+            </p:selectOneRadio>
+         </div>
+         <div class="ui-g-12 ui-md-6 ui-lg-4">
+         </div>
+      </div>
+
+      <div class="ui-g">
+         <div class="ui-g-12 ui-md-6 ui-lg-1">
+            <p:outputLabel for="txt1" value="Preferido (*)"/>
+         </div>
+         <div class="ui-g-12 ui-md-6 ui-lg-5">
+            <p:inputText id="txt1" value="#{conceptMBean.preferido}" style="width:90%"/>
+         </div>
+         <div class="ui-g-12 ui-md-6 ui-lg-2">
+            <p:selectOneRadio id="radio3" value="Insensible" layout="responsive" columns="2" style="width:100%">
+               <f:selectItems value="#{conceptMBean.selectItems2}" />
+            </p:selectOneRadio>
+         </div>
+         <div class="ui-g-12 ui-md-6 ui-lg-4">
+         </div>
+      </div>
+
+      <p:panel id="toggleable" header="Otros Descriptores" toggleable="true" toggleSpeed="500" closeSpeed="500" widgetVar="panel" style="margin-bottom:20px">
+         <div class="ui-g">
+            <div class="ui-g-12 ui-md-6 ui-lg-1">
+               <p:outputLabel for="otherTermino" value="Termino (*)"/>
+            </div>
+
+            <div class="ui-g-12 ui-md-6 ui-lg-5">
+               <p:inputText id="otherTermino" value="#{conceptMBean.otherTermino}" style="width:90%" />
+            </div>
+            <div class="ui-g-12 ui-md-6 ui-lg-2">
+               <p:selectOneRadio id="radio4" value="#{conceptMBean.otherSensibilidad}" layout="responsive" columns="2" style="width:100%">
+                  <f:selectItems value="#{conceptMBean.selectItems2}" />
+               </p:selectOneRadio>
+            </div>
+            <div class="ui-g-12 ui-md-6 ui-lg-2">
+               <p:selectOneMenu id="console" value="#{conceptMBean.otherDescriptionType}"  style="width:90%">
+                  <f:selectItems value="#{conceptMBean.selectItems4}" />
+               </p:selectOneMenu>
+            </div>
+            <div class="ui-g-12 ui-md-6 ui-lg-2">
+               <p:commandButton value="Agregar" id="btn" action="#{conceptMBean.addItem}" update="otherDescriptions" styleClass="ui-priority-primary" style="margin-left: 5%" />
+            </div>
+         </div>
+         <div class="ui-g">
+            <p:dataTable id="otherDescriptions" var="description" value="#{conceptMBean.descriptions}" editable="true"  reflow="true">
+               <p:ajax event="rowEdit" listener="#{conceptMBean.onRowEdit}" update=":mainForm:editMsgs" />
+               <p:ajax event="rowEditCancel" listener="#{conceptMBean.onRowCancel}" update=":mainForm:editMsgs" />
+
+               <p:column headerText="Set/DescId">
+                  <div style="text-align: center;">
+                     <h:outputText value="#{description.descId}" />
+                  </div>
+               </p:column>
+
+               <p:column headerText="Término">
+                  <div style="text-align: center;">
+                     <!--h:outputText value="#{description.termino}" /-->
+                     <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{description.termino}" /></f:facet>
+                        <f:facet name="input"><p:inputText id="otrasTermino" value="#{description.termino}" style="width:100%"/></f:facet>
+                     </p:cellEditor>
+                  </div>
+               </p:column>
+
+               <p:column headerText="Estado">
+                  <div style="text-align: center;">
+                     <!--h:outputText value="#{description.estado}" /-->
+                     <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{description.estado}" /></f:facet>
+                        <f:facet name="input"><p:inputText id="otrasEstado" value="#{description.estado}" style="width:100%"/></f:facet>
+                     </p:cellEditor>
+                  </div>
+               </p:column>
+
+               <p:column headerText="Tipo Descriptor">
+                  <div style="text-align: center;">
+                     <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{description.descriptionType}" /></f:facet>
+                        <f:facet name="input">
+                           <h:selectOneMenu value="#{description.descriptionType}" style="width:100%">
+                              <f:selectItems value="#{conceptMBean.selectItems4}" />
+                           </h:selectOneMenu>
+                        </f:facet>
+                     </p:cellEditor>
+                  </div>
+               </p:column>
+
+               <p:column headerText="Fecha Creación">
+                  <div style="text-align: center;">
+                     <h:outputText value="#{conceptMBean.getMyFormattedDate(description.fechaCreacion)}" />
+                  </div>
+               </p:column>
+
+               <p:column headerText="Sensibilidad">
+                  <div style="text-align: center;">
+                     <!--h:outputText value="#{description.sensibilidad}" /-->
+                     <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{description.sensibilidad}" /></f:facet>
+                        <f:facet name="input">
+                           <h:selectOneMenu value="#{description.sensibilidad}" style="width:100%">
+                              <f:selectItems value="#{conceptMBean.selectItems2}" />
+                           </h:selectOneMenu>
+                        </f:facet>
+                     </p:cellEditor>
+                  </div>
+               </p:column>
+
+               <p:column headerText="Usuario Creador">
+                  <div style="text-align: center;">
+                     <h:outputText value="#{description.usuario}" />
+                  </div>
+               </p:column>
+
+               <p:column headerText="Acción" style="width:32px">
+                  <p:rowEditor />
+                  <p:commandLink actionListener="#{conceptMBean.removeItem(description)}" ajax="true" update="otherDescriptions" immediate="true">
+                     <h:graphicImage name="Images/trash-.png" style="width: 15px; height: 15px" />
+                  </p:commandLink>
+               </p:column>
+            </p:dataTable>
+         </div>
+      </p:panel>
+
+      <h:outputStylesheet id="customCSS">
+         .deleteButton{
+            background-image: url("resources/Images/trash-.png");
+         }
+      </h:outputStylesheet>
+
+   </ui:define>
+</ui:composition>
